@@ -28,7 +28,7 @@
         </tr>
     </thead>
     <tbody>
-        @foreach($eleccion as $eleccion)
+        @foreach($elecciones as $eleccion)
         <tr>
             <td>{{$eleccion->id}}</td>
             <td>{{$eleccion->periodo}}</td>
