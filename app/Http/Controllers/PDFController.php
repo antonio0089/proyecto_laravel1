@@ -19,7 +19,7 @@ class PDFController extends Controller
         //
     }
 
-    public function generatePDF()
+   public function generatePDF()
     {
         $data = [
             'title' => 'Welcome to ItSolutionStuff.com',
