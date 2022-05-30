@@ -3,9 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-//use PDF;
 use mikehaertl\wkhtmlto\Pdf;
-
 
 class PDFController extends Controller
 {
@@ -14,26 +12,25 @@ class PDFController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
-    {
-        //
-    }
-
-   public function generatePDF()
-    {
-        $data = [
-            'title' => 'Welcome to ItSolutionStuff.com',
-            'date' => date('m/d/Y')
-        ];
-          
-        $pdf = PDF::loadView('myPDF', $data);
-    
-        return $pdf->download('itsolutionstuff.pdf');
-    } 
-    
     public function preview()
     {
         return view('chart');
+    }
+
+
+    public function download()
+    {
+        $render = view('chart')->render();
+        $pdf = new Pdf;
+        $pdf->addPage($render);
+        $pdf->setOptions(['javascript-delay' => 5000]);
+        $pdf->saveAs(public_path('report.pdf'));
+        return response()->download(public_path('report.pdf'));
+    }
+
+    public function index()
+    {
+        //
     }
 
     /**
@@ -45,19 +42,6 @@ class PDFController extends Controller
     {
         //
     }
-
-    public function download()
-    {
-        $render = view('chart')->render();
-  
-        $pdf = new Pdf;
-        $pdf->addPage($render);
-        $pdf->setOptions(['javascript-delay' => 5000]);
-        $pdf->saveAs(public_path('report.pdf'));
-   
-        return response()->download(public_path('report.pdf'));
-    }
-
 
     /**
      * Store a newly created resource in storage.

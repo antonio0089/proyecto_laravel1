@@ -15,9 +15,9 @@ class CasillaController extends Controller
      */
     public function index()
     {
+        //echo "Put here logical for method index";
         $casillas = Casilla::all();
-        $today = now();
-        return view('casilla/list', compact('casillas','today'));
+        return view('casilla/list', compact('casillas'));
     }
 
     /**
@@ -39,12 +39,13 @@ class CasillaController extends Controller
     public function store(Request $request)
     {
         //print_r($request->all());
-        $this->validateData($request);
-        
+        $request->validate([
+            'ubicacion' => 'required|max:100',
+        ]);
         $data['ubicacion'] = $request->ubicacion;
         $casilla = Casilla::create($data);
-        return redirect('casilla')->with('success',
-        $casilla->ubicacion . ' guardado satisfactoriamente ...');
+        return redirect('casilla')
+            ->with('success', $casilla->ubicacion . ' insertado correctamente');
     }
 
     /**
@@ -55,7 +56,7 @@ class CasillaController extends Controller
      */
     public function show($id)
     {
-        echo "Element $id"; /// "Element " . $id
+        echo "Elemento seleccionado: $id";
     }
 
     /**
@@ -70,14 +71,6 @@ class CasillaController extends Controller
         return view('casilla/edit', compact('casilla'));
     }
 
-    function validateData(Request $request)
-    {
-        $request->validate([
-            'ubicacion' => 'required|max:100',
-        ]);
-        
-    }
-
     /**
      * Update the specified resource in storage.
      *
@@ -87,11 +80,13 @@ class CasillaController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $this->validateData($request);
-        $data['ubicacion']= $request->ubicacion;
+        $request->validate([
+            'ubicacion' => 'required|max:100',
+        ]);
+        $data['ubicacion'] = $request->ubicacion;
         Casilla::whereId($id)->update($data);
         return redirect('casilla')
-        ->with('success', 'Actualizado correctamente...');
+            ->with('success', 'actualizado');
     }
 
     /**
@@ -106,10 +101,30 @@ class CasillaController extends Controller
         return redirect('casilla');
     }
 
-    public function generatepdf(){
+
+
+    //PDF
+
+
+    public function generatepdf()
+    {
+        // DESCARGAR EL ARCHIVO 
+        /*
+           $casillas = Casilla::all();
+          $pdf = PDF::loadView('casilla/list', ['casillas' => $casillas]);
+         return $pdf->download('archivoCasilla.pdf');
+         */
+
+        /**
+         *  $html = "<div style='text-align:center;'><h1>PDF generado desde etiquetas html</h1>
+         * <br><h3>&copy;lopez.dev</h3> </div>";
+         *      $pdf = PDF::loadHTML($html);
+         *     return $pdf->download('archivo.pdf');
+         */
+
+         
         $casillas = Casilla::all();
-        $pdf = PDF::loadView('casilla/list', ['casillas'=>$casillas]);
-        return $pdf->stream('archivo.pdf');
-        
+        return PDF::loadView('casilla/list', ['casillas'=>$casillas])
+        ->stream('archivo.pdf');
     }
 }

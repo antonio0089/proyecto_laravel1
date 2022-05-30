@@ -14,8 +14,9 @@ class EleccionController extends Controller
      */
     public function index()
     {
+        // echo "index";
         $elecciones = Eleccion::all();
-        return view ('eleccion/list',compact('elecciones'));
+        return view('eleccion/list', compact('elecciones'));
     }
 
     /**
@@ -25,22 +26,22 @@ class EleccionController extends Controller
      */
     public function create()
     {
-        return view('eleccion/create');
+        //
+        return view ('eleccion/create');
     }
+
     function validateData(Request $request)
     {
         $request->validate([
-            'periodo' => 'required|max:200',
-            'fecha' => 'required',
-            'fechaapertura' => 'required',
-            'horaapertura' => 'required',
-            'fechacierre' => 'required',
-            'horacierre' => 'required',
-            'observaciones' => 'required|max:400',
-
+            'periodo' => 'required',
+            'fecha'=>'required',
+            'fechaapertura'=>'required',
+            'horaapertura'=>'required',
+            'fechacierre'=>'required',
+            'horacierre'=>'required',
+            'observaciones'=>'required',
         ]);
     }
-
     /**
      * Store a newly created resource in storage.
      *
@@ -48,22 +49,21 @@ class EleccionController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-
     {
+        //
         $this->validateData($request);
-
-       $campos
-            = array(
-                'periodo' => $request->periodo,
-                'fecha'    => $request->fecha,
-                'fechaapertura'=> $request->fechaapertura,
-                'horaapertura'   => $request->horaapertura,
-                'fechacierre'   => $request->fechacierre,
-                'horacierre'   => $request->horacierre,
-                'observaciones'   => $request->observaciones,
-            );
-            $eleccion = Eleccion::create($campos);
-        echo $eleccion->periodo . " se guardo correctamente ... ";
+        $data=[
+            'periodo'       => $request->periodo,
+		    'fecha'         => $request->fecha,
+		    'fechaapertura' => $request->fechaapertura,
+		    'horaapertura'  => $request->horaapertura,
+		    'fechacierre'   => $request->fechacierre,
+		    'horacierre'    => $request->horacierre,
+		    'observaciones' => $request->observaciones,
+        ];
+        $eleccion = Eleccion::create($data);
+        return redirect('eleccion')
+        ->with('success', $eleccion->periodo.' insertado correctamente');
     }
 
     /**
@@ -85,6 +85,7 @@ class EleccionController extends Controller
      */
     public function edit($id)
     {
+        //
         $eleccion = Eleccion::find($id);
         return view('eleccion/edit', compact('eleccion'));
     }
@@ -98,21 +99,20 @@ class EleccionController extends Controller
      */
     public function update(Request $request, $id)
     {
+        //
         $this->validateData($request);
-
-       
-        $campos=[
-            'periodo' => $request->periodo,
-            'fecha'    => $request->fecha,
-            'fechaapertura'=> $request->fechaapertura,
-            'horaapertura'   => $request->horaapertura,
-            'fechacierre'   => $request->fechacierre,
-            'horacierre'   => $request->horacierre,
-            'observaciones'   => $request->observaciones,
+        $data=[
+            'periodo'       => $request->periodo,
+		    'fecha'         => $request->fecha,
+		    'fechaapertura' => $request->fechaapertura,
+		    'horaapertura'  => $request->horaapertura,
+		    'fechacierre'   => $request->fechacierre,
+		    'horacierre'    => $request->horacierre,
+		    'observaciones' => $request->observaciones,
         ];
-        
-        Eleccion::whereId($id)->update($campos);
-        return redirect('eleccion')->with('success', 'Actualizado correctamente...');
+            Eleccion::whereId($id)->update($data);
+            return redirect('eleccion')
+            ->with('success', 'actualizado');
     }
 
     /**
@@ -123,7 +123,10 @@ class EleccionController extends Controller
      */
     public function destroy($id)
     {
+        //
         Eleccion::whereId($id)->delete();
-        return redirect('eleccion');
+        return redirect('eleccion')
+        ->with('success', 'eliminado');
+        
     }
 }
