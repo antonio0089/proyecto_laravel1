@@ -10,7 +10,7 @@ use App\Models\Voto;
 use App\Models\Votocandidato;
 use Exception;
 use Illuminate\Support\Facades\DB;
-
+ 
 class VotoController extends Controller
 {   
     private $DUPLICATE_KEY_CODE=23000;

@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use mikehaertl\wkhtmlto\Pdf;
+use Illuminate\Support\Facades\Storage;
+//use PDF;
 
 class PDFController extends Controller
 {
@@ -12,25 +14,21 @@ class PDFController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function preview()
-    {
-        return view('chart');
-    }
-
-
-    public function download()
-    {
-        $render = view('chart')->render();
-        $pdf = new Pdf;
-        $pdf->addPage($render);
-        $pdf->setOptions(['javascript-delay' => 5000]);
-        $pdf->saveAs(public_path('report.pdf'));
-        return response()->download(public_path('report.pdf'));
-    }
-
     public function index()
     {
         //
+    }
+
+    public function generatePDF()
+    {
+        $data = [
+            'title' => 'Welcome to ItSolutionStuff.com',
+            'date' => date('m/d/Y')
+        ];
+          
+        $pdf = PDF::loadView('myPDF', $data);
+    
+        return $pdf->download('itsolutionstuff.pdf');
     }
 
     /**
@@ -97,5 +95,27 @@ class PDFController extends Controller
     public function destroy($id)
     {
         //
+    }
+//---------------------------------------
+    public function preview()
+    {
+        return view('chart');
+    }
+  
+    /**
+     * Write code on Construct
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function download()
+    {
+        $render = view('chart')->render();
+  
+        $pdf = new Pdf;
+        $pdf->addPage($render);
+        $pdf->setOptions(['javascript-delay' => 5000]);
+        $pdf->saveAs(public_path_pdf('report.pdf'));
+   
+        return response()->download(public_path('report.pdf'));
     }
 }

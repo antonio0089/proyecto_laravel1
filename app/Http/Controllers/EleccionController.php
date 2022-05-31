@@ -4,8 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Eleccion;
-
-class EleccionController extends Controller
+ class EleccionController extends Controller
 {
     /**
      * Display a listing of the resource.
