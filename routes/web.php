@@ -22,8 +22,7 @@ use App\Http\Controllers\PDFController;
 Route::get('/', function () {
     return view('welcome');
 });
-
-Route::resource('casilla', CasillaController::class);
+Route::get('casilla/pdf', [CasillaController::class,'generatepdf']);Route::resource('casilla', CasillaController::class);
 Route::resource('candidato', CandidatoController::class);
 Route::resource('voto', VotoController::class);
 Route::resource('eleccion', EleccionController::class);
@@ -35,4 +34,5 @@ Route::get('/login/facebook/callback', 'App\Http\Controllers\Auth\LoginControlle
 Route::get('preview', 'App\Http\Controllers\PDFController@preview');
 Route::get('download', 'App\Http\Controllers\PDFController@download')->name('download');
 Route::get('logout',[LoginController::class,'logout']);
+ 
 
